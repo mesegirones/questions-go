@@ -3,7 +3,7 @@
         {
             "id": "1",
             "question": "What mythical creature is Scotland's national animal?", 
-            "answers": [
+            "options": [
                 {
                     "id": "1",
                     "text": "Unicorn", 
@@ -29,7 +29,7 @@
         {
             "id": "2",
             "question": "In what year did Christopher Columbus first reach the Americas?", 
-            "answers": [
+            "options": [
                 {
                     "id": "1",
                     "text": "1592", 
@@ -55,7 +55,7 @@
         {
             "id": "3",
             "question": "Who painted the Mona Lisa?", 
-            "answers": [
+            "options": [
                 {
                     "id": "1",
                     "text": "Donatello", 
@@ -81,7 +81,7 @@
         {
             "id": "4",
             "question": "Which musical is based on the songs of ABBA?", 
-            "answers": [
+            "options": [
                 {
                     "id": "1",
                     "text": "Grease", 
