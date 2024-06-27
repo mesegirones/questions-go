@@ -1,0 +1,108 @@
+{
+    "list": [
+        {
+            "id": "1",
+            "question": "What mythical creature is Scotland's national animal?", 
+            "answers": [
+                {
+                    "id": "1",
+                    "text": "Unicorn", 
+                    "isCorrect": true
+                },
+                {
+                    "id": "2",
+                    "text": "Dragon", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "3",
+                    "text": "Basilisk", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "4",
+                    "text": "Bigfoot", 
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "question": "In what year did Christopher Columbus first reach the Americas?", 
+            "answers": [
+                {
+                    "id": "1",
+                    "text": "1592", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "2",
+                    "text": "1492", 
+                    "isCorrect": true
+                },
+                {
+                    "id": "3",
+                    "text": "1482", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "4",
+                    "text": "1582", 
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "id": "3",
+            "question": "Who painted the Mona Lisa?", 
+            "answers": [
+                {
+                    "id": "1",
+                    "text": "Donatello", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "2",
+                    "text": "Rafael Sanzio", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "3",
+                    "text": "Miguel Ángel Buonarroti", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "4",
+                    "text": "Leonardo da Vinci", 
+                    "isCorrect": true
+                }
+            ]
+        },
+        {
+            "id": "4",
+            "question": "Which musical is based on the songs of ABBA?", 
+            "answers": [
+                {
+                    "id": "1",
+                    "text": "Grease", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "2",
+                    "text": "West Side Sotry", 
+                    "isCorrect": false
+                },
+                {
+                    "id": "3",
+                    "text": "Mamma Mia", 
+                    "isCorrect": true
+                },
+                {
+                    "id": "4",
+                    "text": "Los Miserables", 
+                    "isCorrect": false
+                }
+            ]
+        }
+    ]   
+}
