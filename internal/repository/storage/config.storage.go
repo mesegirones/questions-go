@@ -1,0 +1,43 @@
+package storage
+
+import (
+	"encoding/json"
+	"os"
+	"questions-go/domain"
+)
+
+type LoggerProxy interface {
+	Error(...interface{})
+}
+
+type StorageConfig struct {
+	Logger    LoggerProxy
+	Questions []*domain.Question
+	Answer    []*domain.UserAnswer
+}
+
+func NewStorageCongif(logger LoggerProxy) *StorageConfig {
+	questions := readFile[[]*domain.Question](logger, "")
+	answers := readFile[[]*domain.UserAnswer](logger, "")
+
+	return &StorageConfig{
+		Logger:    logger,
+		Questions: questions,
+		Answer:    answers,
+	}
+}
+
+func readFile[T []*domain.Question | []*domain.UserAnswer](logger LoggerProxy, fileUrl string) T {
+	fileData, err := os.ReadFile(fileUrl)
+	if err != nil {
+		logger.Error(err)
+		return nil
+	}
+	var parsedData T
+	err = json.Unmarshal(fileData, parsedData)
+	if err != nil {
+		logger.Error(err)
+		return nil
+	}
+	return parsedData
+}

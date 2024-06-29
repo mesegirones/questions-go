@@ -6,7 +6,9 @@ import (
 	"questions-go/health"
 	"questions-go/internal/config"
 	"questions-go/internal/proxy/logger"
+	"questions-go/internal/repository/storage"
 	"questions-go/internal/rest"
+	"questions-go/question"
 
 	_ "github.com/volatiletech/sqlboiler/v4/drivers/sqlboiler-mysql/driver"
 )
@@ -18,10 +20,16 @@ func main() {
 	config := config.NewConfig()
 	loggerProxy := logger.NewLoggerProxy(ctx, config.GetRestConfig())
 
+	storageConfig := storage.NewStorageCongif(loggerProxy)
+	questionRepository := storage.NewQuestionRepository(storageConfig)
+
 	r := rest.NewGinEngine(config.GetRestConfig(), loggerProxy)
 
 	healthService := health.NewService(config.GetHealthConfig(), loggerProxy)
 	rest.NewHealthHandler(r, healthService)
+
+	questionService := question.NewService(loggerProxy, questionRepository)
+	rest.NewQuestionHandler(r, questionService)
 
 	if err := r.Run(fmt.Sprintf(":%s", config.GetRestConfig().GetPort())); err != nil {
 		loggerProxy.Error(err)
