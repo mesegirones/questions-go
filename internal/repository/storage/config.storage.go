@@ -12,13 +12,13 @@ type LoggerProxy interface {
 
 type StorageConfig struct {
 	Logger    LoggerProxy
-	Questions []*domain.Question
-	Answer    []*domain.UserAnswer
+	Questions []domain.Question
+	Answer    []domain.UserAnswer
 }
 
 func NewStorageCongif(logger LoggerProxy) *StorageConfig {
-	questions := readFile[[]*domain.Question](logger, "")
-	answers := readFile[[]*domain.UserAnswer](logger, "")
+	questions := readFile[[]domain.Question](logger, "assets/questions.json")
+	answers := readFile[[]domain.UserAnswer](logger, "assets/answers.json")
 
 	return &StorageConfig{
 		Logger:    logger,
@@ -27,14 +27,14 @@ func NewStorageCongif(logger LoggerProxy) *StorageConfig {
 	}
 }
 
-func readFile[T []*domain.Question | []*domain.UserAnswer](logger LoggerProxy, fileUrl string) T {
+func readFile[T []domain.Question | []domain.UserAnswer](logger LoggerProxy, fileUrl string) T {
 	fileData, err := os.ReadFile(fileUrl)
 	if err != nil {
 		logger.Error(err)
 		return nil
 	}
 	var parsedData T
-	err = json.Unmarshal(fileData, parsedData)
+	err = json.Unmarshal(fileData, &parsedData)
 	if err != nil {
 		logger.Error(err)
 		return nil

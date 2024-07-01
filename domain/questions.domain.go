@@ -8,7 +8,6 @@ type Question struct {
 
 type QuestionOptions struct {
 	Id        string `json:"id"`
-	AnswerId  string `json:"answerId"`
 	IsCorrect bool   `json:"isCorrect"`
 }
 

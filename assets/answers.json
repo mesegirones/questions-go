@@ -1,30 +1,28 @@
-{
-    "answers": [
-        {
-            "userId": "1", 
-            "totalCorrect": 0,
-            "results": [
-                {
-                    "questionId": 1, 
-                    "answerId": 3,
-                    "isCorrect": false
-                },
-                {
-                    "questionId": 2, 
-                    "answerId": 4,
-                    "isCorrect": false
-                },
-                {
-                    "questionId": 3, 
-                    "answerId": 2,
-                    "isCorrect": false
-                },
-                {
-                    "questionId": 4, 
-                    "answerId": 3,
-                    "isCorrect": false
-                }
-            ]
-        }
-    ]
-}
+ [
+    {
+        "userId": "1", 
+        "totalCorrect": 0,
+        "results": [
+            {
+                "questionId": "1", 
+                "answerId": "3",
+                "isCorrect": false
+            },
+            {
+                "questionId": "2", 
+                "answerId": "4",
+                "isCorrect": false
+            },
+            {
+                "questionId": "3", 
+                "answerId": "2",
+                "isCorrect": false
+            },
+            {
+                "questionId": "4", 
+                "answerId": "3",
+                "isCorrect": false
+            }
+        ]
+    }
+]

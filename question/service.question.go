@@ -6,9 +6,9 @@ import (
 )
 
 type QuestionRepository interface {
-	List(ctx context.Context) ([]*domain.Question, error)
+	List(ctx context.Context) ([]domain.Question, error)
 	SaveAnswers(ctx context.Context, input domain.UserAnswer) error
-	AnswersList(ctx context.Context) ([]*domain.UserAnswer, error)
+	AnswersList(ctx context.Context) ([]domain.UserAnswer, error)
 }
 
 type LoggerProxy interface {
@@ -27,7 +27,7 @@ func NewService(loggerProxy LoggerProxy, questionRepository QuestionRepository) 
 	}
 }
 
-func (s *Service) GetQuestionList(ctx context.Context) ([]*domain.Question, error) {
+func (s *Service) GetQuestionList(ctx context.Context) ([]domain.Question, error) {
 	list, err := s.QuestionRepository.List(ctx)
 	if err != nil {
 		s.Logger.Error(err)
@@ -65,6 +65,7 @@ func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.Ans
 			SubmittedAnswerId: answer.SubmittedAnswerId,
 			CorrectAnswerId:   correctAnswer.Id,
 		}
+		result = append(result, questionResult)
 
 		userAnswer := domain.Answer{
 			QuestionId:        answer.QuestionId,
@@ -72,16 +73,17 @@ func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.Ans
 			IsCorrect:         questionResult.SubmittedAnswerId == questionResult.CorrectAnswerId,
 		}
 		userAnswers = append(userAnswers, userAnswer)
+
 		if questionResult.SubmittedAnswerId == questionResult.CorrectAnswerId {
 			totalCorrect++
 		}
-
-		s.QuestionRepository.SaveAnswers(ctx, domain.UserAnswer{
-			Answers:      userAnswers,
-			TotalCorrect: totalCorrect,
-		})
-		result = append(result, questionResult)
 	}
+
+	s.QuestionRepository.SaveAnswers(ctx, domain.UserAnswer{
+		UserId:       "-1",
+		Answers:      userAnswers,
+		TotalCorrect: totalCorrect,
+	})
 
 	return result, nil
 }
@@ -95,7 +97,7 @@ func (s *Service) GetStatistics(ctx context.Context, userId string) (*domain.Ans
 
 	helperAnswersPerUser := make(map[string]*domain.UserAnswer)
 	for _, answers := range answersList {
-		helperAnswersPerUser[answers.UserId] = answers
+		helperAnswersPerUser[answers.UserId] = &answers
 	}
 
 	var supTotal, equalTotal, infTotal int

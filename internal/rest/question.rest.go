@@ -10,7 +10,7 @@ import (
 )
 
 type QuestionService interface {
-	GetQuestionList(ctx context.Context) ([]*domain.Question, error)
+	GetQuestionList(ctx context.Context) ([]domain.Question, error)
 	SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) ([]*domain.QuestionResult, error)
 	GetStatistics(ctx context.Context, userId string) (*domain.AnswerStatistics, error)
 }
@@ -27,8 +27,10 @@ func NewQuestionHandler(r *gin.Engine, service QuestionService) {
 	g := r.Group("/question")
 
 	g.GET("/list", handler.GetQuestionList)
-	g.POST("/answers", handler.SubmitQuestionAnswers)
 	g.GET("/statistics/:userId", handler.GetStatistics)
+
+	g.POST("/answers", handler.SubmitQuestionAnswers)
+
 }
 
 func (h *QuestionHandler) GetQuestionList(c *gin.Context) {
