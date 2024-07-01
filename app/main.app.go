@@ -23,6 +23,7 @@ func main() {
 	storageConfig := storage.NewStorageCongif(loggerProxy)
 	questionRepository := storage.NewQuestionRepository(storageConfig)
 
+	//REST api config
 	r := rest.NewGinEngine(config.GetRestConfig(), loggerProxy)
 
 	healthService := health.NewService(config.GetHealthConfig(), loggerProxy)
@@ -34,4 +35,5 @@ func main() {
 	if err := r.Run(fmt.Sprintf(":%s", config.GetRestConfig().GetPort())); err != nil {
 		loggerProxy.Error(err)
 	}
+
 }
