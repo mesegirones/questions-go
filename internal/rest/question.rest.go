@@ -11,7 +11,7 @@ import (
 
 type QuestionService interface {
 	GetQuestionList(ctx context.Context) ([]domain.Question, error)
-	SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) ([]*domain.QuestionResult, error)
+	SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) (*domain.UserAnswer, error)
 	GetStatistics(ctx context.Context, userId string) (*domain.AnswerStatistics, error)
 }
 
@@ -36,7 +36,7 @@ func NewQuestionHandler(r *gin.Engine, service QuestionService) {
 func (h *QuestionHandler) GetQuestionList(c *gin.Context) {
 	response, err := h.Service.GetQuestionList(c)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, domain.MessageResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusAccepted, response)
 }
@@ -50,7 +50,7 @@ func (h *QuestionHandler) SubmitQuestionAnswers(c *gin.Context) {
 	}
 	response, err := h.Service.SubmitQuestionAnswers(c, input)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, domain.MessageResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusAccepted, response)
 }
@@ -59,7 +59,7 @@ func (h *QuestionHandler) GetStatistics(c *gin.Context) {
 	userId := c.Param("userId")
 	response, err := h.Service.GetStatistics(c, userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, domain.MessageResponse{Message: err.Error()})
 	}
 	c.JSON(http.StatusAccepted, response)
 }

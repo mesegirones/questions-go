@@ -25,17 +25,17 @@ func (r *QuestionRepository) List(ctx context.Context) ([]domain.Question, error
 	return r.Questions, nil
 }
 
-func (r *QuestionRepository) SaveAnswers(ctx context.Context, userAnswer domain.UserAnswer) error {
+func (r *QuestionRepository) SaveAnswers(ctx context.Context, userAnswer domain.UserAnswer) (*domain.UserAnswer, error) {
 	totalAnswers := len(r.Answers) - 1
 	lastUser := r.Answers[totalAnswers]
 	userId, err := strconv.Atoi(lastUser.UserId)
 	if err != nil {
-		return domain.ErrInternalServerError
+		return nil, domain.ErrInternalServerError
 	}
 	userId++
 	userAnswer.UserId = strconv.Itoa(userId)
 	r.Answers = append(r.Answers, userAnswer)
-	return nil
+	return &userAnswer, nil
 }
 
 func (r *QuestionRepository) AnswersList(ctx context.Context) ([]domain.UserAnswer, error) {

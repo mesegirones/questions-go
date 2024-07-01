@@ -7,7 +7,7 @@ import (
 
 type QuestionRepository interface {
 	List(ctx context.Context) ([]domain.Question, error)
-	SaveAnswers(ctx context.Context, input domain.UserAnswer) error
+	SaveAnswers(ctx context.Context, input domain.UserAnswer) (*domain.UserAnswer, error)
 	AnswersList(ctx context.Context) ([]domain.UserAnswer, error)
 }
 
@@ -36,7 +36,7 @@ func (s *Service) GetQuestionList(ctx context.Context) ([]domain.Question, error
 	return list, nil
 }
 
-func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) ([]*domain.QuestionResult, error) {
+func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) (*domain.UserAnswer, error) {
 	questionList, err := s.QuestionRepository.List(ctx)
 	if err != nil {
 		s.Logger.Error(err)
@@ -52,7 +52,6 @@ func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.Ans
 		}
 	}
 
-	var result []*domain.QuestionResult
 	var userAnswers []domain.Answer
 	totalCorrect := 0
 	for _, answer := range input {
@@ -60,32 +59,29 @@ func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.Ans
 		if correctAnswer == nil {
 			return nil, domain.ErrBadParamInput
 		}
-		questionResult := &domain.QuestionResult{
-			QuestionId:        answer.QuestionId,
-			SubmittedAnswerId: answer.SubmittedAnswerId,
-			CorrectAnswerId:   correctAnswer.Id,
-		}
-		result = append(result, questionResult)
-
 		userAnswer := domain.Answer{
 			QuestionId:        answer.QuestionId,
 			SubmittedAnswerId: answer.SubmittedAnswerId,
-			IsCorrect:         questionResult.SubmittedAnswerId == questionResult.CorrectAnswerId,
+			IsCorrect:         answer.SubmittedAnswerId == correctAnswer.Id,
 		}
 		userAnswers = append(userAnswers, userAnswer)
 
-		if questionResult.SubmittedAnswerId == questionResult.CorrectAnswerId {
+		if userAnswer.IsCorrect {
 			totalCorrect++
 		}
 	}
 
-	s.QuestionRepository.SaveAnswers(ctx, domain.UserAnswer{
+	res, err := s.QuestionRepository.SaveAnswers(ctx, domain.UserAnswer{
 		UserId:       "-1",
 		Answers:      userAnswers,
 		TotalCorrect: totalCorrect,
 	})
 
-	return result, nil
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 func (s *Service) GetStatistics(ctx context.Context, userId string) (*domain.AnswerStatistics, error) {
@@ -103,6 +99,9 @@ func (s *Service) GetStatistics(ctx context.Context, userId string) (*domain.Ans
 	var supTotal, equalTotal, infTotal int
 
 	userAnswer := helperAnswersPerUser[userId]
+	if userAnswer == nil {
+		return nil, domain.ErrNotFound
+	}
 
 	for id, data := range helperAnswersPerUser {
 		if id == userId || data.TotalCorrect == userAnswer.TotalCorrect {
