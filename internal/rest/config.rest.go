@@ -51,8 +51,5 @@ func NewGinEngine(config Config, logger LoggerProxy) *gin.Engine {
 		AllowHeaders:     []string{"Authorization", "Content-Type", "Origin", "User-Agent", "Accept-Encoding", "Accept", "Connection", "X-Api-Key"},
 	}))
 
-	// r.Use(middleware.AuthContext(oAuthProxy))
-	// r.Use(middleware.TracingMiddleware(logger))
-
 	return r
 }

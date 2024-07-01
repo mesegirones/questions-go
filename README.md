@@ -26,5 +26,4 @@ cd app
 go run .
 ```
 
-
-
+*a basic personal golang boilerplate was used for this project

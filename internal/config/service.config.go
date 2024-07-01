@@ -25,7 +25,6 @@ func NewConfig() *Config {
 		},
 		urlConfig: ConfigURL{
 			service: os.Getenv("SERVICE_URL"),
-			dash:    os.Getenv("DASH_URL"),
 		},
 		healthConfig: ConfigHealth{
 			service: service,

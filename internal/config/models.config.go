@@ -2,15 +2,10 @@ package config
 
 type ConfigURL struct {
 	service string
-	dash    string
 }
 
 func (g ConfigURL) GetService() string {
 	return g.service
-}
-
-func (g ConfigURL) GetDash() string {
-	return g.dash
 }
 
 type ConfigRest struct {
