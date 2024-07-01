@@ -13,7 +13,8 @@ This is a server side aplication that provides a simple quizz with a short list 
 
 The user is a single session user, which means that every time answers are submitted, the systems understands it as a new user. 
 
-Furthermore, users can see their statistiscs. The system responds with three percents: 
+Furthermore, users can see their statistiscs. The system responds with three percent values: 
+
     - Percent of users that got more correct answers. 
     - Percent of users that got the same number of correct answers. 
     - Percent of users that got fewer correct answers. 
