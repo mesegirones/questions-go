@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 	Short: "Simple quizz project",
 	Long: ` Simple quizz project that offers a short list of questions and users can post their anwers.
 	It's considered that users are single session, therefore, users need to answer all questions for request for a completed quizz. 
-	Further, user's can see statistics about their results. 
+	Furthermore, user's can see statistics about their results. 
 	`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
