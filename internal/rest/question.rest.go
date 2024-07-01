@@ -10,7 +10,7 @@ import (
 )
 
 type QuestionService interface {
-	GetQuestionList(ctx context.Context) ([]domain.Question, error)
+	GetQuestionList(ctx context.Context) ([]domain.QuestionOutput, error)
 	SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) (*domain.UserAnswer, error)
 	GetStatistics(ctx context.Context, userId string) (*domain.AnswerStatistics, error)
 }

@@ -8,7 +8,19 @@ type Question struct {
 
 type QuestionOptions struct {
 	Id        string `json:"id"`
+	Text      string `json:"text"`
 	IsCorrect bool   `json:"isCorrect"`
+}
+
+type QuestionOutput struct {
+	Id       string                  `json:"id"`
+	Question string                  `json:"question"`
+	Options  []QuestionOptionsOutput `json:"options"`
+}
+
+type QuestionOptionsOutput struct {
+	Id   string `json:"id"`
+	Text string `json:"text"`
 }
 
 type QuestionResult struct {

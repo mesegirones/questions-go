@@ -27,13 +27,30 @@ func NewService(loggerProxy LoggerProxy, questionRepository QuestionRepository) 
 	}
 }
 
-func (s *Service) GetQuestionList(ctx context.Context) ([]domain.Question, error) {
+func (s *Service) GetQuestionList(ctx context.Context) ([]domain.QuestionOutput, error) {
 	list, err := s.QuestionRepository.List(ctx)
+	var questions []domain.QuestionOutput
+	for _, question := range list {
+		var options []domain.QuestionOptionsOutput
+		for _, option := range question.Options {
+			newOption := domain.QuestionOptionsOutput{
+				Id:   option.Id,
+				Text: option.Text,
+			}
+			options = append(options, newOption)
+		}
+		newQuestion := domain.QuestionOutput{
+			Id:       question.Id,
+			Question: question.Question,
+			Options:  options,
+		}
+		questions = append(questions, newQuestion)
+	}
 	if err != nil {
 		s.Logger.Error(err)
 		return nil, domain.ErrInternalServerError
 	}
-	return list, nil
+	return questions, nil
 }
 
 func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.AnswersInput) (*domain.UserAnswer, error) {
@@ -46,23 +63,21 @@ func (s *Service) SubmitQuestionAnswers(ctx context.Context, input []*domain.Ans
 	helperQuestions := make(map[string]*domain.QuestionOptions)
 	for _, question := range questionList {
 		for _, questionOption := range question.Options {
-			if questionOption.IsCorrect {
-				helperQuestions[question.Id] = &questionOption
-			}
+			helperQuestions[question.Id+questionOption.Id] = &questionOption
 		}
 	}
 
 	var userAnswers []domain.Answer
 	totalCorrect := 0
 	for _, answer := range input {
-		correctAnswer := helperQuestions[answer.QuestionId]
+		correctAnswer := helperQuestions[answer.QuestionId+answer.SubmittedAnswerId]
 		if correctAnswer == nil {
 			return nil, domain.ErrBadParamInput
 		}
 		userAnswer := domain.Answer{
 			QuestionId:        answer.QuestionId,
 			SubmittedAnswerId: answer.SubmittedAnswerId,
-			IsCorrect:         answer.SubmittedAnswerId == correctAnswer.Id,
+			IsCorrect:         correctAnswer.IsCorrect,
 		}
 		userAnswers = append(userAnswers, userAnswer)
 
